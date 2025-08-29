@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Utility function
+
 function alternatingCaps(str) {
   let result = '';
   let upper = true;
@@ -21,12 +21,12 @@ function alternatingCaps(str) {
   return result;
 }
 
-// 👇 Root route so browser shows a message instead of error
+
 app.get("/", (req, res) => {
   res.send("BFHL API is live 🚀. Use POST /bfhl to test the API.");
 });
 
-// 👇 Main POST API
+
 app.post("/bfhl", (req, res) => {
   try {
     const data = req.body.data;
