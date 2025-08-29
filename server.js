@@ -8,7 +8,7 @@ app.use(express.json());
 
 
 function alternatingCaps(str) {
-  let result = '';
+  let result = "";
   let upper = true;
   for (let char of str) {
     if (/[a-zA-Z]/.test(char)) {
@@ -21,12 +21,17 @@ function alternatingCaps(str) {
   return result;
 }
 
-
+// Root route
 app.get("/", (req, res) => {
   res.send("BFHL API is live 🚀. Use POST /bfhl to test the API.");
 });
 
 
+app.get("/bfhl", (req, res) => {
+  res.status(200).json({ operation_code: 1 });
+});
+
+// POST /bfhl
 app.post("/bfhl", (req, res) => {
   try {
     const data = req.body.data;
@@ -37,28 +42,28 @@ app.post("/bfhl", (req, res) => {
     let alphabets = [];
     let special_characters = [];
     let sum = 0;
-    let concat_string = "";
 
     for (let item of data) {
       let strItem = String(item);
-      if (/^\d+$/.test(strItem)) { 
+
+      if (/^\d+$/.test(strItem)) {
         let num = parseInt(strItem);
         sum += num;
         if (num % 2 === 0) even_numbers.push(strItem);
         else odd_numbers.push(strItem);
-      } else if (/^[a-zA-Z]+$/.test(strItem)) { 
+      } else if (/^[a-zA-Z]+$/.test(strItem)) {
         alphabets.push(strItem.toUpperCase());
-      } else { 
+      } else {
         special_characters.push(strItem);
       }
     }
 
     // concat all alphabets in reverse order, alternating caps
     let allAlphabets = data
-      .filter(i => /^[a-zA-Z]+$/.test(String(i)))
+      .filter((i) => /^[a-zA-Z]+$/.test(String(i)))
       .reverse()
-      .join('');
-    concat_string = alternatingCaps(allAlphabets);
+      .join("");
+    let concat_string = alternatingCaps(allAlphabets);
 
     const response = {
       is_success: true,
@@ -69,16 +74,18 @@ app.post("/bfhl", (req, res) => {
       even_numbers,
       alphabets,
       special_characters,
-      sum: String(sum),
-      concat_string
+      sum: String(sum), 
+      concat_string,
     };
 
     res.status(200).json(response);
-
   } catch (err) {
     res.status(400).json({ is_success: false, message: err.message });
   }
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(PORT, () =>
+  console.log(` Server running on http://localhost:${PORT}`)
+);
+
